@@ -41,7 +41,7 @@ alternatives tend to be poorly-received**.
 
 ## RFC Review
 
-Once an RFC becomes "active" then authors may implement it and submit the feature as a pull request to the Rust repo. Being "active" is not a rubber stamp, and in particular still does not mean the feature will ultimately be merged; it does mean that in principle all the major stakeholders have agreed to the feature and are amenable to merging it.
+Once an RFC becomes "active" then authors may implement it and submit the feature as a pull request to the Ara repo that the RFC is relevant to. Being "active" is not a rubber stamp, and in particular still does not mean the feature will ultimately be merged; it does mean that in principle all the major stakeholders have agreed to the feature and are amenable to merging it.
 
 Furthermore, the fact that a given RFC has been accepted and is 'active' implies nothing about what priority is assigned to its implementation, nor whether anybody is currently working on it.
 
