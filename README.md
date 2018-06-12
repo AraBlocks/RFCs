@@ -53,4 +53,4 @@ The author of an RFC is not obligated to implement it. Of course, the RFC author
 
 If you are interested in working on the implementation for an 'active' RFC, but cannot determine if someone else is already working on it, feel free to ask (e.g. by leaving a comment on the associated issue).
 
-**Ara's RFC process owes inspiration to the (React)[https://github.com/reactjs/rfcs] and (Rust)[https://github.com/rust-lang/rfcs] RFC processes.**
+**Ara's RFC process owes inspiration to the [React](https://github.com/reactjs/rfcs) and [Rust](https://github.com/rust-lang/rfcs) RFC processes.**
