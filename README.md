@@ -26,7 +26,7 @@ the RFC merged into the RFC repo as a markdown file. At which point the RFC is c
 
 * Fork the RFC repo http://github.com/AraBlocks/rfcs
 * Copy `0000-template.md` to `text/0000-my-feature.md` (where
-'my-feature' is descriptive. Don't assign an RFC number yet).
+'my-feature' is descriptive. Don't assign an RFC number yet). If the `text` directory does not exist, please create it prior to copying.
 * Fill in the RFC. Put care into the details: **RFCs that do not
 present convincing motivation, demonstrate understanding of the
 impact of the design, or are disingenuous about the drawbacks or
