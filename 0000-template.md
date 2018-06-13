@@ -1,46 +1,99 @@
-- Feature Identifier: (unique identifier for this proposed feature, my_new_feature)
-- Start Date: (fill me in with today's date, YYYY-MM-DD)
-- Affects Ara System: (ARAid, AFS, Other etc.)
-- RFC PR: (leave this empty)
-- Ara Issue: (leave this empty)
+<Topic Name>
+==============
 
-# Summary
+---
+Request For Comments: 0000
+---
+Author(s): <Author(s) First & Last>
+---
+Category: <Category>
+---
+Date: <Month>, <Year>
+---
 
-Brief explanation of the feature.
+## 0. Abstract
 
-# Basic example
+> A brief introductory explanation or abstract of the publication.
 
-If the proposal involves a new or changed API, include a basic code example.
-Omit this section if it's not applicable.
+## 1. Status
 
-# Motivation
+> The status of this document should be reflected here.
 
-* Why are we doing this?
-* What use cases does it support?
-* What is the expected outcome?
+This RFC is under _active development and consideration_.
 
-# Detailed design
+## 2. Introduction
 
-This is the bulk of the RFC. Explain the design in enough detail for somebody
-familiar with Ara to understand, and for somebody familiar with the
-implementation to implement. This should get into specifics and corner-cases,
-and include examples of how the feature is used. Any new terminology should be
-defined here.
+> An introduction into the features, protocols, structures, or systems described
+> throughout this document.
 
-# Drawbacks
+## 3. Background & Motivation
 
-Why should we *not* do this?
+> An explanation of the background and motivation for content described
+> throughout the document. This section should detail use cases
+> and expected outcomes.
 
-# Alternatives
+## 4. <Topic Name>
 
-* What other designs have been considered?
-* What is the impact of not doing this?
+> This section should detail any terminology used through the rest of
+> this section or document that may be foreign, conflated, or confused by the
+> the reader.
 
-# Adoption strategy
+> This section is intended to explain the design features, protocols,
+> structures, or systems described by this document. This section should
+> be verbose, intuitive, contain necessary citations, provide code blocks, and
+> contain enough information for implementation or integration.
 
-If we implement this proposal, how will existing developers adopt it? Is
-this a breaking change?
+## 5. Real World Example
 
-# Unresolved questions
+> This section should present a real world example showing expected
+> outcomes described by the content of this document.
 
-Are there any lingering questions that need to be answered prior to a possible implementation of this RFC?
+> If an RFC describes a data structure, a human readable visual representation
+> should be shown, such as a JSON structure.
+
+> If an RFC describes a system or protocol, visuals showing interactions
+> between entities described therein should be present along with
+> ancillary data structures.
+
+> If an RFC describes a functional API for a programming language, it
+> should detail the signatures, usage, and combinations with other
+> functions described in this document.
+
+> This section is intended to be intuitive and present a real world case
+> for the content described in this document.
+
+## 6. Drawbacks
+
+> This section should describe known drawbacks for implementers
+> wishing to implement or integrate features, protocols, structures, or systems
+> described by this document. A reader should be able to read this section
+> and understand why, if there is a reason, they should *not* implement
+> or integrate features, protocols, structures, or systems described by
+> this document.
+
+## 7. Alternatives
+
+> This section should describe alternatives to the features, protocols,
+> structures, or systems detailed in this document. If a RFC describes
+> a key exchange protocol, then it should also detail the alternatives
+> such as the Diffie-Hellman key exchange algorithm.
+
+## 8. Adoption Strategy
+
+> This section should describe necessary details for the implementation,
+> integration, or adoption of the content described by this section.
+
+## 9. Unresolved Questions
+
+> This section should provide and attempt to resolve any lingering questions
+> regarding the contents of this document.
+
+## 10 Security Considerations
+
+> This section should describe all security considerations related to
+> the implementation or integration of the features, protocols, structures,
+> or systems described by this document.
+
+## 11. References
+
+> Reference citation should be indexed and detailed in this section.
