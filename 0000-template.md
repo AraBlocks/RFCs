@@ -15,8 +15,8 @@ Omit this section if it's not applicable.
 
 # Motivation
 
-* Why are we doing this? 
-* What use cases does it support? 
+* Why are we doing this?
+* What use cases does it support?
 * What is the expected outcome?
 
 # Detailed design
@@ -33,7 +33,7 @@ Why should we *not* do this?
 
 # Alternatives
 
-* What other designs have been considered? 
+* What other designs have been considered?
 * What is the impact of not doing this?
 
 # Adoption strategy
