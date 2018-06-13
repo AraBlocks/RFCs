@@ -13,7 +13,7 @@ Date: <Month>, <Year>
 
 ## 0. Abstract
 
-> An brief introductory explanation or abstract of the publication.
+> A brief introductory explanation or abstract of the publication.
 
 ## 1. Status
 
@@ -49,7 +49,7 @@ This RFC is under _active development and consideration_.
 > outcomes described by the content of this document.
 
 > If an RFC describes a data structure, a human readable visual representation
-> should be show, such as a JSON strucuture.
+> should be shown, such as a JSON structure.
 
 > If an RFC describes a system or protocol, visuals showing interactions
 > between entities described therein should be present along with
@@ -64,7 +64,7 @@ This RFC is under _active development and consideration_.
 
 ## 6. Drawbacks
 
-> This section should describe known drawbacks for implementors
+> This section should describe known drawbacks for implementers
 > wishing to implement or integrate features, protocols, structures, or systems
 > described by this document. A reader should be able to read this section
 > and understand why, if there is a reason, they should *not* implement
@@ -88,7 +88,7 @@ This RFC is under _active development and consideration_.
 > This section should provide and attempt to resolve any lingering questions
 > regarding the contents of this document.
 
-## 10 Security Conseridations
+## 10 Security Considerations
 
 > This section should describe all security considerations related to
 > the implementation or integration of the features, protocols, structures,
