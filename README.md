@@ -5,9 +5,9 @@ A repository of Request For Comments (RFC) documents for ARA.
 
 ## 0. Table Of Contents
 
-* 1. [Introduction](#1-introduction)
-* 2. [RFC Categories](#2-rfc-categories)
-* 3. [RFC Considerations, Submission, & Review Process](#3-rfc-considerations-submission-review-process)
+1. [Introduction](#1-introduction)
+2. [RFC Categories](#2-rfc-categories)
+3. [RFC Considerations, Submission, & Review Process](#3-rfc-considerations-submission-review-process)
 
 ## 1. Introduction
 
