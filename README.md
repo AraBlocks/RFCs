@@ -19,7 +19,7 @@ On the contrary, items that do not have to be submitted as an RFC:
 * Additions that strictly improve objective, numerical quality criteria (warning removal, performance improvements, platform coverage etc)
 * Additions only likely to be noticed by other developers-of-ara, invisible to users-of-ara.
 
-## Opening an RFC
+## Opening a RFC
 
 In short, to get a major feature added to Ara, one usually first gets
 the RFC merged into the RFC repo as a markdown file. At which point the RFC is considered active for the potential inclusion in future versions of the platform.
@@ -38,6 +38,7 @@ alternatives tend to be poorly-received**.
 * An RFC can be modified based upon feedback from the team and community. Significant modifications may trigger a new final comment period.
 * An RFC may be rejected by the team after public discussion has settled and comments have been made summarizing the rationale for rejection. A member of the team should then close the RFCs associated pull request.
 * An RFC may be accepted at the close of its final comment period. A team member will merge the RFCs associated pull request, at which point the RFC will become 'active'.
+* An RFC may be accepted or rejected prior to the close of its final comment period if all reviewing members of the RFC come to consensus about its acceptance or "rejectance".
 
 ## RFC Review
 
