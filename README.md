@@ -40,8 +40,8 @@ You must follow this process when you plan to make "substantial" changes to the 
 On the contrary, items that do not have to be submitted as an RFC:
 
 * Rephrasing, reorganizing, refactoring, or otherwise "changing shape does not change meaning".
-* Additions that strictly improve objective, numerical quality criteria (warning removal, performance improvements, platform coverage etc)
-* Additions only likely to be noticed by other developers of ARA, invisible to users of ARA.
+* Additions that strictly improve objective, numerical quality criteria (warning removal, performance improvements, platform coverage etc).
+* Additions likely to be noticed only by other developers of ARA, invisible to users of ARA.
 
 ### 3.2 Submission - How To Open A RFC
 
