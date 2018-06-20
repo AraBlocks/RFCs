@@ -15,7 +15,7 @@ Many changes, including bug fixes and documentation improvements can be implemen
 
 Some changes though are "substantial", and we ask that these be put through a bit of a design process and produce a consensus amongst the Ara community and the Ara Core team.
 
-The RFC process is designed to give contributors a structured pathway to present and integrate new features into the Ara project. The active RFC list can be found [here](https://github.com/AraBlocks/rfc/pulls).
+The RFC process is designed to give contributors a structured pathway to present and integrate new features into the ARA project. The active RFC list can be found [here](https://github.com/AraBlocks/rfc/pulls).
 
 ## 2. RFC Categories
 
@@ -45,7 +45,7 @@ On the contrary, items that do not have to be submitted as an RFC:
 
 ### 3.2 Submission - How To Open A RFC
 
-Submissions of a RFC should occur be following the steps outlined in this section.
+The submission of a RFC should follow the steps outlined in this section.
 
 1. Fork the RFC repo http://github.com/AraBlocks/rfcs
 2. Copy `0000-template.md` to `text/0000-my-feature.md` (where
@@ -56,7 +56,7 @@ Submissions of a RFC should occur be following the steps outlined in this sectio
 
 #### Final Comment Period
 
-RFCs that are candidates for inclusion in Ara will enter a "final comment period" lasting 3 calendar days. The beginning of this period will be signaled with a comment and tag on the RFCs pull request.
+RFCs that are candidates for inclusion in ARA will enter a "final comment period" lasting 3 calendar days. The beginning of this period will be signaled with a comment and tag on the RFCs pull request.
 
 An RFC can be modified based upon feedback from the team and community. Significant modifications may trigger a new final comment period.
 
