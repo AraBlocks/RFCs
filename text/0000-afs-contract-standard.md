@@ -30,7 +30,7 @@ This RFC is under _active development and consideration_.
 > throughout the document. This section should detail use cases
 > and expected outcomes.
 
-## 4. <Topic Name>
+## 4. AFS Contract Standard
 
 > This section should detail any terminology used through the rest of
 > this section or document that may be foreign, conflated, or confused by the
@@ -40,6 +40,47 @@ This RFC is under _active development and consideration_.
 > structures, or systems described by this document. This section should
 > be verbose, intuitive, contain necessary citations, provide code blocks, and
 > contain enough information for implementation or integration.
+
+```
+pragma solidity 0.4.24;
+
+contract AFS {
+  address public owner;
+
+  // Basic AFS info
+  string did;
+  bool valid;
+  uint256 price;
+  uint256 reward;
+
+  // Storage 
+  mapping(uint8 => Buffers) buffer_mappings;
+  struct Buffers {
+    mapping (uint256 => bytes) buffers;
+    uint256 largest_key;
+    uint256[] keys;
+    bool invalid;
+  }
+
+  // Basic methods
+  function getDID() public view returns (string did);
+  function getIsValid() public view returns (bool valid);
+
+  // Storage methods
+  function write(uint8 file, uint256 offset, bytes buffer, bool last_write) public;
+  function read(uint8 file, uint256 offset) public view returns (bytes buffer);
+  function delete() public;
+
+  // Pricing methods
+  function setPrice(uint256 price) public;
+  function getPrice() public view returns (uint256 price);
+  function setReward(uint256 reward) public;
+  function getReward() public view returns (uint256 reward);
+
+  // Purchase methods
+  function purchase(string identity) public;
+}
+```
 
 ## 5. Real World Example
 
