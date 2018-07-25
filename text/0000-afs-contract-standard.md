@@ -350,7 +350,7 @@ contract AFS is AFSBase {
 
   // Purchase methods
   function purchase(string _purchaser) external returns (bool success) {
-    ERC20Token token = ERC20Token(token_);
+    ARAToken token = ARAToken(token_);
     require (token.allowance(msg.sender, address(this)) >= price_); // check if purchaser approved purchase
 
     if (token.transferFrom(address(this), owner_, price_ - reward_)) {
