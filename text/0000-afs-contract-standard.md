@@ -277,6 +277,8 @@ event Purchased(string _purchaser, string _did)
 > This section is intended to be intuitive and present a real world case
 > for the content described in this document.
 
+TBD (include example of deployed AFS contract)
+
 ## 6. Drawbacks
 
 > This section should describe known drawbacks for implementers
@@ -286,28 +288,23 @@ event Purchased(string _purchaser, string _did)
 > or integrate features, protocols, structures, or systems described by
 > this document.
 
+TBD
+
 ## 7. Alternatives
 
-> This section should describe alternatives to the features, protocols,
-> structures, or systems detailed in this document. If a RFC describes
-> a key exchange protocol, then it should also detail the alternatives
-> such as the Diffie-Hellman key exchange algorithm.
+* Create functional smart contracts with mappings for each AFS (i.e., separate contracts for `Storage`, `Price`, `Purchase`, `Rewards`)
 
 ## 8. Adoption Strategy
 
-> This section should describe necessary details for the implementation,
-> integration, or adoption of the content described by this section.
+This AFS Contract Standard should be built into the AFS `commit` function, wherein the first ever `commit` for an AFS should deploy a smart contract for that AFS. All relevant AFS and DCDN functions, such as `destroy`, `price`, `rewards`, and `purchase` should seek to interface with this contract.
 
 ## 9. Unresolved Questions
 
-> This section should provide and attempt to resolve any lingering questions
-> regarding the contents of this document.
+TBD
 
 ## 10 Security Considerations
 
-> This section should describe all security considerations related to
-> the implementation or integration of the features, protocols, structures,
-> or systems described by this document.
+TBD
 
 ## 11. References
 
