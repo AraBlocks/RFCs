@@ -42,7 +42,7 @@ following terminology outlined in this section.
 
 ``` solidity
 contract AFSBase {
-  address public owner;
+  address public owner_;
 
   event Commit(string _did, uint8 _file, uint256 _offset, bytes _buffer);
   event Unlisted(string _did);
@@ -51,7 +51,7 @@ contract AFSBase {
   event Purchased(string _purchaser, string _did);
 
   // Storage (random-access-contract)
-  mapping(uint8 => Buffers) metadata;
+  mapping(uint8 => Buffers) metadata_;
   struct Buffers {
     mapping (uint256 => bytes) buffers;
     uint256[] offsets;
@@ -93,7 +93,7 @@ address public owner
 The AFS SLEEP files `metadata.tree` and `metadata.signatures`. `0` maps to the `tree` file and `1` maps the `signatures` file.
 
 ``` solidity
-mapping(uint8 => Buffers) metadata
+mapping(uint8 => Buffers) metadata_
 ```
 
 ### 4.4 Structs
@@ -162,7 +162,7 @@ function price() public view returns (uint256)
 
 #### reward
 
-Returns the reward allocation for this AFS. Cannot exceed `price`
+Returns the reward allocation for this AFS. Cannot exceed `price()`
 
 ``` solidity
 function reward() public view returns (uint256)
@@ -170,7 +170,7 @@ function reward() public view returns (uint256)
 
 #### write
 
-Writes `buffer` at `offset` in `file`. If `last_write` is true, emits the `Commit` event. If `file` has been marked `invalid`, this function reverts. Only `owner` may call this function.
+Writes `_buffer` at `_offset` in `_file`. If `_last_write` is true, emits the `Commit` event. If `_file` has been marked `invalid`, this function reverts. Only `owner_` may call this function.
 
 ``` solidity
 function write(uint8 _file, uint256 _offset, bytes _buffer, bool _last_write) external returns (bool success)
@@ -178,7 +178,7 @@ function write(uint8 _file, uint256 _offset, bytes _buffer, bool _last_write) ex
 
 #### read
 
-Returns the `buffer` located at `offset` in `file` if it exists. Otherwise, returns an empty buffer.
+Returns the `buffer` located at `_offset` in `_file` if it exists. Otherwise, returns an empty buffer.
 
 ``` solidity
 function read(uint8 _file, uint256 _offset) public view returns (bytes buffer)
@@ -186,7 +186,7 @@ function read(uint8 _file, uint256 _offset) public view returns (bytes buffer)
 
 #### unlist
 
-Invalidates the SLEEP files for this AFS by setting both `Buffer` structs to `invalid`. `listed` should always return `false` after this function is called. Only `owner` may call this function.
+Invalidates the SLEEP files for this AFS by setting both `Buffer` structs to `invalid`. `listed()` should always return `false` after this function is called. Only `owner_` may call this function.
 
 ``` solidity
 function unlist() public returns (bool success)
@@ -194,7 +194,7 @@ function unlist() public returns (bool success)
 
 #### setPrice
 
-Sets the price (in ARA tokens) of this AFS, including rewards. Only the `owner` may call this function. This function should `throw` if `reward` has been set and `price` does not exceed it.
+Sets the price (in ARA tokens) of this AFS, including rewards. Only the `owner_` may call this function. This function should revert if `reward` has been set and `_price` does not exceed it.
 
 ``` solidity
 function setPrice(uint256 _price) external returns (bool success)
@@ -202,7 +202,7 @@ function setPrice(uint256 _price) external returns (bool success)
 
 #### setReward
 
-Sets the reward allocation (in ARA tokens) for this AFS. Only the `owner` may call this function. This function should `throw` if `price` has been set and `reward` exceeds it.
+Sets the reward allocation (in ARA tokens) for this AFS. Only the `owner` may call this function. This function should revert if `price` has been set and `_reward` exceeds it.
 
 ``` solidity
 function setReward(uint256 _reward) external returns (bool success)
@@ -210,7 +210,7 @@ function setReward(uint256 _reward) external returns (bool success)
 
 #### purchase
 
-Transfers `price` ARA tokens from `purchaser`'s wallet and adds this `did` to `purchaser`'s library in the _Library_ contract. Requires `purchaser` to first `approve` this AFS contract address in the _ARA Token_ contract.
+Transfers #`price` ARA tokens from `_purchaser`'s wallet and adds this `did` to `_purchaser`'s library in the _Library_ contract. Requires `_purchaser` to first [`approve`](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md#approve) this AFS contract address in the _ARA Token_ contract.
 
 ``` solidity
 function purchase(string _purchaser) external returns (bool success)
@@ -275,7 +275,7 @@ contract AFS is AFSBase {
   constructor(address _lib, address _token) public {
     token_  = _token;
     lib_    = _lib;
-    owner   = msg.sender;
+    owner_  = msg.sender;
     listed_ = true;
     price_  = 0;
     reward_ = 0;
@@ -305,12 +305,12 @@ contract AFS is AFSBase {
   }
 
   // Storage methods (random-access-contract)
-  function write(uint8 _file, uint256 _offset, bytes _buffer, bool _last_write) external onlyBy(owner) returns (bool success){
+  function write(uint8 _file, uint256 _offset, bytes _buffer, bool _last_write) external onlyBy(owner_) returns (bool success){
     // make sure AFS hasn't been removed
-    require(!metadata[_file].invalid);
+    require(!metadata_[_file].invalid);
 
-    metadata[_file].buffers[_offset] = _buffer;
-    metadata[_file].offsets.push(_offset);
+    metadata_[_file].buffers[_offset] = _buffer;
+    metadata_[_file].offsets.push(_offset);
 
     if (_last_write) {
       emit Commit(did_, _file, _offset, _buffer);
@@ -319,29 +319,29 @@ contract AFS is AFSBase {
   }
 
   function read(uint8 _file, uint256 _offset) public view returns (bytes buffer) {
-    if (metadata[_file].invalid) {
+    if (metadata_[_file].invalid) {
       return ""; // empty bytes
     }
-    return metadata[_file].buffers[_offset];
+    return metadata_[_file].buffers[_offset];
   }
 
-  function unlist() public onlyBy(owner) returns (bool success) {
-    metadata[0].invalid = true;
-    metadata[1].invalid = true;
+  function unlist() public onlyBy(owner_) returns (bool success) {
+    metadata_[0].invalid = true;
+    metadata_[1].invalid = true;
     listed_ = false;
     emit Unlisted(did_);
     return true;
   }
 
   // Pricing methods
-  function setPrice(uint256 _price) external onlyBy(owner) returns (bool success) {
+  function setPrice(uint256 _price) external onlyBy(owner_) returns (bool success) {
     require(reward_ <= _price);
     price_ = _price;
     emit PriceSet(did_, price_);
     return true;
   }
 
-  function setReward(uint256 _reward) external onlyBy(owner) returns (bool success) {
+  function setReward(uint256 _reward) external onlyBy(owner_) returns (bool success) {
     require(_reward <= price_);
     reward_ = _reward;
     emit RewardSet(did_, reward_);
@@ -350,10 +350,10 @@ contract AFS is AFSBase {
 
   // Purchase methods
   function purchase(string _purchaser) external returns (bool success) {
-    Token token = Token(token_);
+    ERC20Token token = ERC20Token(token_);
     require (token.allowance(msg.sender, address(this)) >= price_); // check if purchaser approved purchase
 
-    if (token.transferFrom(address(this), owner, price_ - reward_)) {
+    if (token.transferFrom(address(this), owner_, price_ - reward_)) {
       Library lib = Library(lib_);
       lib.addLibraryItem(_purchaser, did_);
       emit Purchased(_purchaser, did_);
