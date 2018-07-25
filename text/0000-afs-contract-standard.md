@@ -92,7 +92,7 @@ contract AFSBase {
 
 #### owner
 
-The owner of this AFS. This is the only address that can modify the storage of this AFS contract.
+The owner of this AFS. This is the only address that can modify the storage and pricing of this AFS contract.
 
 ``` solidity
 address public owner_
@@ -106,7 +106,7 @@ The ARAToken contract address.
 address public token_
 ```
 
-### lib
+###E lib
 
 The ARA Library contract address.
 
@@ -140,7 +140,7 @@ uint256 public price_
 
 #### reward
 
-The reward allocation for this AFS. Cannot exceed `price_`
+The reward allocation (in ARA tokens) for this AFS. Cannot exceed `price_`
 
 ``` solidity
 uint256 public reward_
