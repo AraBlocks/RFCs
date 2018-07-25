@@ -93,17 +93,17 @@ address public owner
 The AFS SLEEP files `metadata.tree` and `metadata.signatures`. `0` maps to the `tree` file and `1` maps the `signatures` file.
 
 ``` js
-mapping(uint8 => Offsets) metadata
+mapping(uint8 => Buffers) metadata
 ```
 
 ### 4.4 Structs
 
-#### Offsets
+#### Buffers
 
 Represents either the `tree` or `signatures` file
 
 ``` js
-struct Offsets {
+struct Buffers {
     mapping (uint256 => bytes) buffers;
     uint256[] offsets;
     bool invalid;
