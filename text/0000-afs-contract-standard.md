@@ -51,8 +51,8 @@ contract AFS {
   event Purchased(string _identity);
 
   // Storage (random-access-contract)
-  mapping(uint8 => Offsets) metadata;
-  struct Offsets {
+  mapping(uint8 => Buffers) metadata;
+  struct Buffers {
     mapping (uint256 => bytes) buffers;
     uint256[] offsets;
     bool invalid;
