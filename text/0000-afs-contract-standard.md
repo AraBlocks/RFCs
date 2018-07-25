@@ -41,7 +41,7 @@ following terminology outlined in this section.
 ### 4.2 AFS Abstract Contract
 
 ``` solidity
-contract AFS {
+contract AFSBase {
   address public owner;
 
   event Commit(string _did, uint8 _file, uint256 _offset, bytes _buffer);
@@ -59,22 +59,22 @@ contract AFS {
   }
 
   // Basic methods
-  function did() view returns (string did);
-  function listed() view returns (bool valid);
-  function price() view returns (uint256 price);
-  function reward() view returns (uint256 reward);
+  function did() public view returns (string);
+  function listed() public view returns (bool);
+  function price() public view returns (uint256);
+  function reward() public view returns (uint256);
 
   // Storage methods (random-access-contract)
-  function write(uint8 file, uint256 offset, bytes buffer, bool last_write) returns (bool success);
-  function read(uint8 file, uint256 offset) view returns (bytes buffer);
-  function unlist() returns (bool success);
+  function write(uint8 _file, uint256 _offset, bytes _buffer, bool _last_write) external returns (bool success);
+  function read(uint8 _file, uint256 _offset) public view returns (bytes buffer);
+  function unlist() public returns (bool success);
 
   // Pricing methods
-  function setPrice(uint256 price) returns (bool success);
-  function setReward(uint256 reward) returns (bool success);
+  function setPrice(uint256 _price) external returns (bool success);
+  function setReward(uint256 _reward) external returns (bool success);
 
   // Purchase methods
-  function purchase(string identity) returns (bool success);
+  function purchase(string _purchaser) external returns (bool success);
 }
 ```
 
@@ -141,15 +141,15 @@ bool invalid;
 Returns the ARA DID of this AFS generated when the AFS was created.
 
 ``` solidity
-function did() public view returns (string did)
+function did() public view returns (string)
 ```
 
 #### listed
 
-Returns whether this piece of content can be purchased.
+Returns whether this AFS can be purchased.
 
 ``` solidity
-function listed() public view returns (bool valid)
+function listed() public view returns (bool)
 ```
 
 #### price
@@ -157,7 +157,7 @@ function listed() public view returns (bool valid)
 Returns the total price (in ARA tokens) of this AFS, including rewards.
 
 ``` solidity
-function price() public view returns (uint256 price)
+function price() public view returns (uint256)
 ```
 
 #### reward
@@ -165,7 +165,7 @@ function price() public view returns (uint256 price)
 Returns the reward allocation for this AFS. Cannot exceed `price`
 
 ``` solidity
-function reward() public view returns (uint256 reward)
+function reward() public view returns (uint256)
 ```
 
 #### write
@@ -173,7 +173,7 @@ function reward() public view returns (uint256 reward)
 Writes `buffer` at `offset` in `file`. If `last_write` is true, emits the `Commit` event. If `file` has been marked `invalid`, this function reverts. Only `owner` may call this function.
 
 ``` solidity
-function write(uint8 file, uint256 offset, bytes buffer, bool last_write) returns (bool success)
+function write(uint8 _file, uint256 _offset, bytes _buffer, bool _last_write) external returns (bool success)
 ```
 
 #### read
@@ -181,7 +181,7 @@ function write(uint8 file, uint256 offset, bytes buffer, bool last_write) return
 Returns the `buffer` located at `offset` in `file` if it exists. Otherwise, returns an empty buffer.
 
 ``` solidity
-function read(uint8 file, uint256 offset) view returns (bytes buffer)
+function read(uint8 _file, uint256 _offset) public view returns (bytes buffer)
 ```
 
 #### unlist
@@ -189,7 +189,7 @@ function read(uint8 file, uint256 offset) view returns (bytes buffer)
 Invalidates the SLEEP files for this AFS by setting both `Buffer` structs to `invalid`. `listed` should always return `false` after this function is called. Only `owner` may call this function.
 
 ``` solidity
-function unlist() returns (bool success)
+function unlist() public returns (bool success)
 ```
 
 #### setPrice
@@ -197,7 +197,7 @@ function unlist() returns (bool success)
 Sets the price (in ARA tokens) of this AFS, including rewards. Only the `owner` may call this function. This function should `throw` if `reward` has been set and `price` does not exceed it.
 
 ``` solidity
-function setPrice(uint256 price) returns (bool success)
+function setPrice(uint256 _price) external returns (bool success)
 ```
 
 #### setReward
@@ -205,7 +205,7 @@ function setPrice(uint256 price) returns (bool success)
 Sets the reward allocation (in ARA tokens) for this AFS. Only the `owner` may call this function. This function should `throw` if `price` has been set and `reward` exceeds it.
 
 ``` solidity
-function setReward(uint256 reward) returns (bool success)
+function setReward(uint256 _reward) external returns (bool success)
 ```
 
 #### purchase
@@ -213,7 +213,7 @@ function setReward(uint256 reward) returns (bool success)
 Transfers `price` ARA tokens from `purchaser`'s wallet and adds this `did` to `purchaser`'s library in the _Library_ contract. Requires `purchaser` to first `approve` this AFS contract address in the _ARA Token_ contract.
 
 ``` solidity
-function purchase(string purchaser) returns (bool success)
+function purchase(string _purchaser) external returns (bool success)
 ```
 
 ### 4.6 Events
@@ -260,35 +260,114 @@ event Purchased(string _purchaser, string _did)
 
 ## 5. Real World Example
 
-> This section should present a real world example showing expected
-> outcomes described by the content of this document.
+The following is a real world example of what a deployed AFS contract might look like with method implementations.
 
-> If an RFC describes a data structure, a human readable visual representation
-> should be shown, such as a solidityON structure.
+``` solidity
+contract AFS is AFSBase {
+  address token_;
+  address lib_;
 
-> If an RFC describes a system or protocol, visuals showing interactions
-> between entities described therein should be present along with
-> ancillary data structures.
+  string  did_;
+  bool    listed_;
+  uint256 price_;
+  uint256 reward_;
 
-> If an RFC describes a functional API for a programming language, it
-> should detail the signatures, usage, and combinations with other
-> functions described in this document.
+  constructor(address _lib, address _token) public {
+    token_  = _token;
+    lib_    = _lib;
+    owner   = msg.sender;
+    listed_ = true;
+    price_  = 0;
+    reward_ = 0;
+  }
 
-> This section is intended to be intuitive and present a real world case
-> for the content described in this document.
+  modifier onlyBy(address _account)
+    {
+        require(
+            msg.sender == _account,
+            "Sender not authorized."
+        );
+        _;
+    }
 
-TBD (include example of deployed AFS contract)
+  // Basic methods
+  function did() public view returns (string) {
+    return did_;
+  }
+  function listed() public view returns (bool) {
+    return listed_;
+  }
+  function price() public view returns (uint256) {
+    return price_;
+  }
+  function reward() public view returns (uint256) {
+    return reward_;
+  }
+
+  // Storage methods (random-access-contract)
+  function write(uint8 _file, uint256 _offset, bytes _buffer, bool _last_write) external onlyBy(owner) returns (bool success){
+    // make sure AFS hasn't been removed
+    require(!metadata[_file].invalid);
+
+    metadata[_file].buffers[_offset] = _buffer;
+    metadata[_file].offsets.push(_offset);
+
+    if (_last_write) {
+      emit Commit(did_, _file, _offset, _buffer);
+    }
+    return true;
+  }
+
+  function read(uint8 _file, uint256 _offset) public view returns (bytes buffer) {
+    if (metadata[_file].invalid) {
+      return ""; // empty bytes
+    }
+    return metadata[_file].buffers[_offset];
+  }
+
+  function unlist() public onlyBy(owner) returns (bool success) {
+    metadata[0].invalid = true;
+    metadata[1].invalid = true;
+    listed_ = false;
+    emit Unlisted(did_);
+    return true;
+  }
+
+  // Pricing methods
+  function setPrice(uint256 _price) external onlyBy(owner) returns (bool success) {
+    require(reward_ <= _price);
+    price_ = _price;
+    emit PriceSet(did_, price_);
+    return true;
+  }
+
+  function setReward(uint256 _reward) external onlyBy(owner) returns (bool success) {
+    require(_reward <= price_);
+    reward_ = _reward;
+    emit RewardSet(did_, reward_);
+    return true;
+  }
+
+  // Purchase methods
+  function purchase(string _purchaser) external returns (bool success) {
+    Token token = Token(token_);
+    require (token.allowance(msg.sender, address(this)) >= price_); // check if purchaser approved purchase
+
+    if (token.transferFrom(address(this), owner, price_ - reward_)) {
+      Library lib = Library(lib_);
+      lib.addLibraryItem(_purchaser, did_);
+      emit Purchased(_purchaser, did_);
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+```
 
 ## 6. Drawbacks
 
-> This section should describe known drawbacks for implementers
-> wishing to implement or integrate features, protocols, structures, or systems
-> described by this document. A reader should be able to read this section
-> and understand why, if there is a reason, they should *not* implement
-> or integrate features, protocols, structures, or systems described by
-> this document.
-
-TBD
+N/A
 
 ## 7. Alternatives
 
@@ -300,11 +379,11 @@ This AFS Contract Standard should be built into the AFS `commit` function, where
 
 ## 9. Unresolved Questions
 
-TBD
+N/A
 
 ## 10 Security Considerations
 
-TBD
+N/A
 
 ## 11. References
 
