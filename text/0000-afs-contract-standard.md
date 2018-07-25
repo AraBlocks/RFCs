@@ -202,7 +202,7 @@ function setPrice(uint256 price) returns (bool success)
 
 #### setReward
 
-Sets the reward allocation (in ARA tokens) for this AFS. Only the `owner` may call this function. This function should `throw` if `price` has been set and `reward` does not exceed it.
+Sets the reward allocation (in ARA tokens) for this AFS. Only the `owner` may call this function. This function should `throw` if `price` has been set and `reward` exceeds it.
 
 ``` solidity
 function setReward(uint256 reward) returns (bool success)
