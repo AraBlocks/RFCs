@@ -250,7 +250,7 @@ function purchase(string _purchaser) external returns (bool success);
 MUST trigger when the final buffer has been written in a commit
 
 ``` solidity
-event Commit(string _did, uint8 _file, uint256 _offset, bytes _buffer)
+event Commit(string _did, uint8 _file, uint256 _offset, bytes _buffer);
 ```
 
 #### Unlisted
@@ -258,7 +258,7 @@ event Commit(string _did, uint8 _file, uint256 _offset, bytes _buffer)
 MUST trigger when an AFS is unlisted
 
 ``` solidity
-event Unlisted(string _did)
+event Unlisted(string _did);
 ```
 
 #### PriceSet
@@ -266,7 +266,7 @@ event Unlisted(string _did)
 MUST trigger when an AFS price is set
 
 ``` solidity
-event PriceSet(string _did, uint256 _price)
+event PriceSet(string _did, uint256 _price);
 ```
 
 #### RewardSet
@@ -274,7 +274,7 @@ event PriceSet(string _did, uint256 _price)
 MUST trigger when an AFS reward is set
 
 ``` solidity
-event RewardSet(string _did, uint256 _reward)
+event RewardSet(string _did, uint256 _reward);
 ```
 
 #### Purchased
@@ -282,7 +282,7 @@ event RewardSet(string _did, uint256 _reward)
 MUST trigger when an AFS is purchased
 
 ``` solidity
-event Purchased(string _purchaser, string _did)
+event Purchased(string _purchaser, string _did);
 ```
 
 ## 5. Real World Example
