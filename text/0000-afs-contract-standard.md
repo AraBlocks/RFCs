@@ -43,6 +43,13 @@ following terminology outlined in this section.
 ``` solidity
 contract AFSBase {
   address public owner_;
+  address public token_;
+  address public lib_;
+
+  string  public did_;
+  bool    public listed_;
+  uint256 public price_;
+  uint256 public reward_;
 
   event Commit(string _did, uint8 _file, uint256 _offset, bytes _buffer);
   event Unlisted(string _did);
@@ -67,12 +74,6 @@ contract AFSBase {
     bool invalid;
   }
 
-  // Basic methods
-  function did() public view returns (string);
-  function listed() public view returns (bool);
-  function price() public view returns (uint256);
-  function reward() public view returns (uint256);
-
   // Storage methods (random-access-contract)
   function write(uint8 _file, uint256 _offset, bytes _buffer, bool _last_write) external returns (bool success);
   function read(uint8 _file, uint256 _offset) public view returns (bytes buffer);
@@ -94,8 +95,57 @@ contract AFSBase {
 The owner of this AFS. This is the only address that can modify the storage of this AFS contract.
 
 ``` solidity
-address public owner
+address public owner_
 ```
+
+#### token
+
+The ARAToken contract address.
+
+``` solidity
+address public token_
+```
+
+### lib
+
+The ARA Library contract address.
+
+``` solidity
+address public lib_
+```
+
+#### did
+
+The ARA DID of this AFS generated when the AFS was created.
+
+``` solidity
+string public did_
+```
+
+#### listed
+
+Boolean flag indicating whether this AFS can be purchased.
+
+``` solidity
+bool public listed_
+```
+
+#### price
+
+The total price (in ARA tokens) of this AFS, including rewards.
+
+``` solidity
+uint256 public price_
+```
+
+#### reward
+
+The reward allocation for this AFS. Cannot exceed `price_`
+
+``` solidity
+uint256 public reward_
+```
+
 
 #### metadata
 
@@ -144,38 +194,6 @@ bool invalid;
 ```
 
 ### 4.5 Methods
-
-#### did
-
-Returns the ARA DID of this AFS generated when the AFS was created.
-
-``` solidity
-function did() public view returns (string)
-```
-
-#### listed
-
-Returns whether this AFS can be purchased.
-
-``` solidity
-function listed() public view returns (bool)
-```
-
-#### price
-
-Returns the total price (in ARA tokens) of this AFS, including rewards.
-
-``` solidity
-function price() public view returns (uint256)
-```
-
-#### reward
-
-Returns the reward allocation for this AFS. Cannot exceed `price()`
-
-``` solidity
-function reward() public view returns (uint256)
-```
 
 #### write
 
@@ -273,35 +291,15 @@ The following is a real world example of what a deployed AFS contract might look
 
 ``` solidity
 contract AFS is AFSBase {
-  address token_;
-  address lib_;
 
-  string  did_;
-  bool    listed_;
-  uint256 price_;
-  uint256 reward_;
-
-  constructor(address _lib, address _token) public {
+  constructor(address _lib, address _token, string _did) public {
+    owner_  = msg.sender;
     token_  = _token;
     lib_    = _lib;
-    owner_  = msg.sender;
+    did_    = _did;
     listed_ = true;
     price_  = 0;
     reward_ = 0;
-  }
-
-  // Basic methods
-  function did() public view returns (string) {
-    return did_;
-  }
-  function listed() public view returns (bool) {
-    return listed_;
-  }
-  function price() public view returns (uint256) {
-    return price_;
-  }
-  function reward() public view returns (uint256) {
-    return reward_;
   }
 
   // Storage methods (random-access-contract)
