@@ -95,7 +95,7 @@ contract AFSBase {
 The owner of this AFS. This is the only address that can modify the storage and pricing of this AFS contract.
 
 ``` solidity
-address public owner_
+address public owner_;
 ```
 
 #### token
@@ -103,7 +103,7 @@ address public owner_
 The ARAToken contract address.
 
 ``` solidity
-address public token_
+address public token_;
 ```
 
 #### lib
@@ -111,7 +111,7 @@ address public token_
 The ARA Library contract address.
 
 ``` solidity
-address public lib_
+address public lib_;
 ```
 
 #### did
@@ -119,7 +119,7 @@ address public lib_
 The ARA DID of this AFS generated when the AFS was created.
 
 ``` solidity
-string public did_
+string public did_;
 ```
 
 #### listed
@@ -127,7 +127,7 @@ string public did_
 Boolean flag indicating whether this AFS can be purchased.
 
 ``` solidity
-bool public listed_
+bool public listed_;
 ```
 
 #### price
@@ -135,7 +135,7 @@ bool public listed_
 The total price (in ARA tokens) of this AFS, including rewards.
 
 ``` solidity
-uint256 public price_
+uint256 public price_;
 ```
 
 #### reward
@@ -143,7 +143,7 @@ uint256 public price_
 The reward allocation (in ARA tokens) for this AFS. Cannot exceed `price_`
 
 ``` solidity
-uint256 public reward_
+uint256 public reward_;
 ```
 
 
@@ -152,7 +152,7 @@ uint256 public reward_
 The AFS SLEEP files `metadata.tree` and `metadata.signatures`. `0` maps to the `tree` file and `1` maps the `signatures` file.
 
 ``` solidity
-mapping(uint8 => Buffers) metadata_
+mapping(uint8 => Buffers) metadata_;
 ```
 
 ### 4.4 Structs
@@ -174,7 +174,7 @@ struct Buffers {
 Maps buffer offsets to entries in the `tree` or `signatures` file
 
 ``` solidity
-mapping (uint256 => bytes) buffers
+mapping (uint256 => bytes) buffers;
 ```
 
 ##### offsets
@@ -182,7 +182,7 @@ mapping (uint256 => bytes) buffers
 An array of all the offsets in the `buffers` mapping for the `tree` or `signatures` file
 
 ``` solidity
-uint256[] offsets
+uint256[] offsets;
 ```
 
 ##### invalid
@@ -190,7 +190,7 @@ uint256[] offsets
 Flag representing the validity of this SLEEP file
 
 ``` solidity
-bool invalid
+bool invalid;
 ```
 
 ### 4.5 Methods
@@ -200,7 +200,7 @@ bool invalid
 Writes `_buffer` at `_offset` in `_file`. If `_last_write` is true, emits the `Commit` event. If `_file` has been marked `invalid`, this function reverts. Only `owner_` may call this function.
 
 ``` solidity
-function write(uint8 _file, uint256 _offset, bytes _buffer, bool _last_write) external returns (bool success)
+function write(uint8 _file, uint256 _offset, bytes _buffer, bool _last_write) external returns (bool success);
 ```
 
 #### read
@@ -208,7 +208,7 @@ function write(uint8 _file, uint256 _offset, bytes _buffer, bool _last_write) ex
 Returns the `buffer` located at `_offset` in `_file` if it exists. Otherwise, returns an empty buffer.
 
 ``` solidity
-function read(uint8 _file, uint256 _offset) public view returns (bytes buffer)
+function read(uint8 _file, uint256 _offset) public view returns (bytes buffer);
 ```
 
 #### unlist
@@ -216,7 +216,7 @@ function read(uint8 _file, uint256 _offset) public view returns (bytes buffer)
 Invalidates the SLEEP files for this AFS by setting both `Buffer` structs to `invalid`. `listed()` should always return `false` after this function is called. Only `owner_` may call this function.
 
 ``` solidity
-function unlist() public returns (bool success)
+function unlist() public returns (bool success);
 ```
 
 #### setPrice
@@ -224,7 +224,7 @@ function unlist() public returns (bool success)
 Sets the price (in ARA tokens) of this AFS, including rewards. Only the `owner_` may call this function. This function should revert if `reward` has been set and `_price` does not exceed it.
 
 ``` solidity
-function setPrice(uint256 _price) external returns (bool success)
+function setPrice(uint256 _price) external returns (bool success);
 ```
 
 #### setReward
@@ -232,7 +232,7 @@ function setPrice(uint256 _price) external returns (bool success)
 Sets the reward allocation (in ARA tokens) for this AFS. Only the `owner` may call this function. This function should revert if `price` has been set and `_reward` exceeds it.
 
 ``` solidity
-function setReward(uint256 _reward) external returns (bool success)
+function setReward(uint256 _reward) external returns (bool success);
 ```
 
 #### purchase
@@ -240,7 +240,7 @@ function setReward(uint256 _reward) external returns (bool success)
 Transfers #`price` ARA tokens from `_purchaser`'s wallet and adds this `did` to `_purchaser`'s library in the _Library_ contract. Requires `_purchaser` to first [`approve`](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md#approve) this AFS contract address in the _ARA Token_ contract.
 
 ``` solidity
-function purchase(string _purchaser) external returns (bool success)
+function purchase(string _purchaser) external returns (bool success);
 ```
 
 ### 4.6 Events
