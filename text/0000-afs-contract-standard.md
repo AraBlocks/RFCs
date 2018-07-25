@@ -25,18 +25,9 @@ This RFC is under _active development and consideration_.
 
 ## 3. Background & Motivation
 
-A standard abstract contract allows any AFS to be used everywhere on ARA, provides greater clarity into how AFSs are represented on the blockchain, and enhances ownership tracking. Furthermore, because we expect ARA tokens to be used for payments, unique contracts for each AFS facilitate more discrete [approvals](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md#approve)[1], and thus, greater security.
+A standard abstract contract allows any AFS to be used everywhere on ARA, provides greater clarity into how AFSs are represented on the blockchain, and enhances ownership tracking. Furthermore, because we expect ARA tokens to be used for payments, unique contracts for each AFS facilitate more discrete [approvals](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md#approve), and thus, greater security.
 
 ## 4. AFS Contract Standard
-
-> This section should detail any terminology used through the rest of
-> this section or document that may be foreign, conflated, or confused by the
-> the reader.
-
-> This section is intended to explain the design features, protocols,
-> structures, or systems described by this document. This section should
-> be verbose, intuitive, contain necessary citations, provide code blocks, and
-> contain enough information for implementation or integration.
 
 This section outlines the functions and global variables included in the AFS abstract contract.
 
@@ -45,7 +36,7 @@ This section outlines the functions and global variables included in the AFS abs
 The rest of the sections that follow make use of abbreviated forms of the
 following terminology outlined in this section.
 
-* _**DID**_ - Decentralized Identifier, the ARA identity of this AFS [2]
+* _**DID**_ - Decentralized Identifier, the ARA identity of this AFS [1]
 
 ### 4.2 AFS Abstract Contract
 
@@ -60,11 +51,10 @@ contract AFS {
   event Purchased(string _identity);
 
   // Storage (random-access-contract)
-  mapping(uint8 => Buffers) buffer_mappings;
-  struct Buffers {
+  mapping(uint8 => Offsets) metadata;
+  struct Offsets {
     mapping (uint256 => bytes) buffers;
-    uint256 largest_key;
-    uint256[] keys;
+    uint256[] offsets;
     bool invalid;
   }
 
@@ -98,42 +88,42 @@ The owner of this AFS. This is the only address that can modify the storage of t
 address public owner
 ```
 
-#### buffer_mappings
+#### metadata
 
-The AFS SLEEP files `metadata.tree` and `metadata.signature`.
+The AFS SLEEP files `metadata.tree` and `metadata.signatures`. `0` maps to the `tree` file and `1` maps the `signatures` file.
 
 ``` js
-mapping(uint8 => Buffers) buffer_mappings
+mapping(uint8 => Offsets) metadata
 ```
 
 ### 4.4 Structs
 
-#### Buffers
+#### Offsets
 
-Represents either the `tree` or `signature` file
+Represents either the `tree` or `signatures` file
 
 ``` js
-struct Buffers {
+struct Offsets {
     mapping (uint256 => bytes) buffers;
-    uint256[] keys;
+    uint256[] offsets;
     bool invalid;
   }
 ```
 
 ##### buffers
 
-Maps buffer offsets to entries in the `tree` or `signature` file
+Maps buffer offsets to entries in the `tree` or `signatures` file
 
 ``` js
 mapping (uint256 => bytes) buffers
 ```
 
-##### keys
+##### offsets
 
-An array of all the offset keys in the `buffers` mapping for the `tree` or `signature` file
+An array of all the offsets in the `buffers` mapping for the `tree` or `signatures` file
 
 ``` js
-uint256[] keys
+uint256[] offsets
 ```
 
 ##### invalid
@@ -321,4 +311,4 @@ event Purchased(string _purchaser, string _did)
 
 ## 11. References
 
-> Reference citation should be indexed and detailed in this section.
+* [1] - *https://w3c-ccg.github.io/did-spec/*
