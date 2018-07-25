@@ -50,6 +50,15 @@ contract AFSBase {
   event RewardSet(string _did, uint256 _reward);
   event Purchased(string _purchaser, string _did);
 
+  modifier onlyBy(address _account)
+  {
+      require(
+          msg.sender == _account,
+          "Sender not authorized."
+      );
+      _;
+  }
+
   // Storage (random-access-contract)
   mapping(uint8 => Buffers) metadata_;
   struct Buffers {
@@ -280,15 +289,6 @@ contract AFS is AFSBase {
     price_  = 0;
     reward_ = 0;
   }
-
-  modifier onlyBy(address _account)
-    {
-        require(
-            msg.sender == _account,
-            "Sender not authorized."
-        );
-        _;
-    }
 
   // Basic methods
   function did() public view returns (string) {
