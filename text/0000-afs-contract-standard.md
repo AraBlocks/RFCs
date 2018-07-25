@@ -130,7 +130,7 @@ uint256[] offsets
 
 Flag representing the validity of this SLEEP file
 
-``` js
+``` solidity
 bool invalid;
 ```
 
@@ -140,7 +140,7 @@ bool invalid;
 
 Returns the ARA DID of this AFS generated when the AFS was created.
 
-``` js
+``` solidity
 function did() public view returns (string did)
 ```
 
@@ -148,7 +148,7 @@ function did() public view returns (string did)
 
 Returns whether this piece of content can be purchased.
 
-``` js
+``` solidity
 function listed() public view returns (bool valid)
 ```
 
@@ -156,7 +156,7 @@ function listed() public view returns (bool valid)
 
 Returns the total price (in ARA tokens) of this AFS, including rewards.
 
-``` js
+``` solidity
 function price() public view returns (uint256 price)
 ```
 
@@ -164,7 +164,7 @@ function price() public view returns (uint256 price)
 
 Returns the reward allocation for this AFS. Cannot exceed `price`
 
-``` js
+``` solidity
 function reward() public view returns (uint256 reward)
 ```
 
@@ -172,7 +172,7 @@ function reward() public view returns (uint256 reward)
 
 Writes `buffer` at `offset` in `file`. If `last_write` is true, emits the `Commit` event. If `file` has been marked `invalid`, this function reverts. Only `owner` may call this function.
 
-``` js
+``` solidity
 function write(uint8 file, uint256 offset, bytes buffer, bool last_write) returns (bool success)
 ```
 
@@ -180,7 +180,7 @@ function write(uint8 file, uint256 offset, bytes buffer, bool last_write) return
 
 Returns the `buffer` located at `offset` in `file` if it exists. Otherwise, returns an empty buffer.
 
-``` js
+``` solidity
 function read(uint8 file, uint256 offset) view returns (bytes buffer)
 ```
 
@@ -188,7 +188,7 @@ function read(uint8 file, uint256 offset) view returns (bytes buffer)
 
 Invalidates the SLEEP files for this AFS by setting both `Buffer` structs to `invalid`. `listed` should always return `false` after this function is called. Only `owner` may call this function.
 
-``` js
+``` solidity
 function unlist() returns (bool success)
 ```
 
@@ -196,7 +196,7 @@ function unlist() returns (bool success)
 
 Sets the price (in ARA tokens) of this AFS, including rewards. Only the `owner` may call this function. This function should `throw` if `reward` has been set and `price` does not exceed it.
 
-``` js
+``` solidity
 function setPrice(uint256 price) returns (bool success)
 ```
 
@@ -204,7 +204,7 @@ function setPrice(uint256 price) returns (bool success)
 
 Sets the reward allocation (in ARA tokens) for this AFS. Only the `owner` may call this function. This function should `throw` if `price` has been set and `reward` does not exceed it.
 
-``` js
+``` solidity
 function setReward(uint256 reward) returns (bool success)
 ```
 
@@ -212,7 +212,7 @@ function setReward(uint256 reward) returns (bool success)
 
 Transfers `price` ARA tokens from `purchaser`'s wallet and adds this `did` to `purchaser`'s library in the _Library_ contract. Requires `purchaser` to first `approve` this AFS contract address in the _ARA Token_ contract.
 
-``` js
+``` solidity
 function purchase(string purchaser) returns (bool success)
 ```
 
@@ -222,7 +222,7 @@ function purchase(string purchaser) returns (bool success)
 
 MUST trigger when the final buffer has been written in a commit
 
-``` js
+``` solidity
 event Commit(string _did, uint8 _file, uint256 _offset, bytes _buffer)
 ```
 
@@ -230,7 +230,7 @@ event Commit(string _did, uint8 _file, uint256 _offset, bytes _buffer)
 
 MUST trigger when an AFS is unlisted
 
-``` js
+``` solidity
 event Unlisted(string _did)
 ```
 
@@ -238,7 +238,7 @@ event Unlisted(string _did)
 
 MUST trigger when an AFS price is set
 
-``` js
+``` solidity
 event PriceSet(string _did, uint256 _price)
 ```
 
@@ -246,7 +246,7 @@ event PriceSet(string _did, uint256 _price)
 
 MUST trigger when an AFS reward is set
 
-``` js
+``` solidity
 event RewardSet(string _did, uint256 _reward)
 ```
 
@@ -254,7 +254,7 @@ event RewardSet(string _did, uint256 _reward)
 
 MUST trigger when an AFS is purchased
 
-``` js
+``` solidity
 event Purchased(string _purchaser, string _did)
 ```
 
@@ -264,7 +264,7 @@ event Purchased(string _purchaser, string _did)
 > outcomes described by the content of this document.
 
 > If an RFC describes a data structure, a human readable visual representation
-> should be shown, such as a JSON structure.
+> should be shown, such as a solidityON structure.
 
 > If an RFC describes a system or protocol, visuals showing interactions
 > between entities described therein should be present along with
