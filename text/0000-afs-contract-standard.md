@@ -40,7 +40,7 @@ following terminology outlined in this section.
 
 ### 4.2 AFS Abstract Contract
 
-``` js
+``` solidity
 contract AFS {
   address public owner;
 
@@ -84,7 +84,7 @@ contract AFS {
 
 The owner of this AFS. This is the only address that can modify the storage of this AFS contract.
 
-``` js
+``` solidity
 address public owner
 ```
 
@@ -92,7 +92,7 @@ address public owner
 
 The AFS SLEEP files `metadata.tree` and `metadata.signatures`. `0` maps to the `tree` file and `1` maps the `signatures` file.
 
-``` js
+``` solidity
 mapping(uint8 => Buffers) metadata
 ```
 
@@ -102,7 +102,7 @@ mapping(uint8 => Buffers) metadata
 
 Represents either the `tree` or `signatures` file
 
-``` js
+``` solidity
 struct Buffers {
     mapping (uint256 => bytes) buffers;
     uint256[] offsets;
@@ -114,7 +114,7 @@ struct Buffers {
 
 Maps buffer offsets to entries in the `tree` or `signatures` file
 
-``` js
+``` solidity
 mapping (uint256 => bytes) buffers
 ```
 
@@ -122,7 +122,7 @@ mapping (uint256 => bytes) buffers
 
 An array of all the offsets in the `buffers` mapping for the `tree` or `signatures` file
 
-``` js
+``` solidity
 uint256[] offsets
 ```
 
