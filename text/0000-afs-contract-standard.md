@@ -44,11 +44,11 @@ following terminology outlined in this section.
 contract AFS {
   address public owner;
 
-  event Commit(string _identity);
-  event Unlisted(string _identity);
-  event PriceSet(string _identity);
-  event RewardSet(string _identity);
-  event Purchased(string _identity);
+  event Commit(string _did, uint8 _file, uint256 _offset, bytes _buffer);
+  event Unlisted(string _did);
+  event PriceSet(string _did, uint256 _price);
+  event RewardSet(string _did, uint256 _reward);
+  event Purchased(string _purchaser, string _did);
 
   // Storage (random-access-contract)
   mapping(uint8 => Buffers) metadata;
@@ -231,7 +231,7 @@ event Commit(string _did, uint8 _file, uint256 _offset, bytes _buffer)
 MUST trigger when an AFS is unlisted
 
 ``` js
-event Invalidated(string _did)
+event Unlisted(string _did)
 ```
 
 #### PriceSet
