@@ -190,7 +190,7 @@ uint256[] offsets
 Flag representing the validity of this SLEEP file
 
 ``` solidity
-bool invalid;
+bool invalid
 ```
 
 ### 4.5 Methods
