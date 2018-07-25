@@ -106,7 +106,7 @@ The ARAToken contract address.
 address public token_
 ```
 
-###E lib
+#### lib
 
 The ARA Library contract address.
 
