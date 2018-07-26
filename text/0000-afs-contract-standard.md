@@ -43,18 +43,22 @@ following terminology outlined in this section.
 ``` solidity
 contract AFSBase {
   address public owner_;
-  address public token_;
-  address public lib_;
+
+  ARAToken public token_;
+  Library public lib_;
 
   string  public did_;
   bool    public listed_;
   uint256 public price_;
-  uint256 public reward_;
+
+  mapping(bytes32 => uint256) internal rewards_;
+  mapping(bytes32 => bool) internal purchasers_;
 
   event Commit(string _did, uint8 _file, uint256 _offset, bytes _buffer);
   event Unlisted(string _did);
   event PriceSet(string _did, uint256 _price);
-  event RewardSet(string _did, uint256 _reward);
+  event RewardDeposited(string _did, uint256 _reward);
+  event RewardDistributed(string _did, uint256 _distributed, uint256 _returned);
   event Purchased(string _purchaser, string _did);
 
   modifier onlyBy(address _account)
@@ -74,17 +78,17 @@ contract AFSBase {
     bool invalid;
   }
 
+  function setPrice(uint256 _price) external returns (bool success);
+
+  function depositReward(uint256 _reward) public returns (bool success);
+  function distributeReward(address[] _address, uint256[] _amounts) public returns (bool success);
+
+  function purchase(string _purchaser, bool _download) external returns (bool success);
+
   // Storage methods (random-access-contract)
   function write(uint8 _file, uint256 _offset, bytes _buffer, bool _last_write) external returns (bool success);
   function read(uint8 _file, uint256 _offset) public view returns (bytes buffer);
   function unlist() public returns (bool success);
-
-  // Pricing methods
-  function setPrice(uint256 _price) external returns (bool success);
-  function setReward(uint256 _reward) external returns (bool success);
-
-  // Purchase methods
-  function purchase(string _purchaser) external returns (bool success);
 }
 ```
 
@@ -100,18 +104,18 @@ address public owner_;
 
 #### token
 
-The ARAToken contract address.
+The ARAToken contract.
 
 ``` solidity
-address public token_;
+ARAToken public token_;
 ```
 
 #### lib
 
-The ARA Library contract address.
+The ARA Library contract.
 
 ``` solidity
-address public lib_;
+Library public lib_;
 ```
 
 #### did
@@ -132,20 +136,27 @@ bool public listed_;
 
 #### price
 
-The total price (in ARA tokens) of this AFS, including rewards.
+The total price (in ARA tokens) of this AFS.
 
 ``` solidity
 uint256 public price_;
 ```
 
-#### reward
+#### rewards
 
-The reward allocation (in ARA tokens) for this AFS. Cannot exceed `price_`
+Mapping that stores reward amounts deposited by each purchaser.
 
 ``` solidity
-uint256 public reward_;
+mapping(bytes32 => uint256) internal rewards_;
 ```
 
+#### purchasers
+
+Mapping that stores the purchasers of this AFS.
+
+```` solidity 
+mapping(bytes32 => bool) internal purchasers_;
+````
 
 #### metadata
 
@@ -195,6 +206,38 @@ bool invalid;
 
 ### 4.5 Methods
 
+#### setPrice
+
+Sets the price (in ARA tokens) of this AFS. Only the `owner_` may call this function.
+
+``` solidity
+function setPrice(uint256 _price) external returns (bool success);
+```
+
+#### depositReward
+
+Deposits a reward allocation to be associated with the `msg.sender`.
+
+``` solidity
+function depositReward(uint256 _reward) public returns (bool success);
+```
+
+#### distributeReward
+
+Distributes the previously deposited reward by `msg.sender`. The amounts provided by `_amounts` are sent to the provided `_addresses`, respectively. If there is any reward balance remaining following distribution, it is returned to `msg.sender`.
+
+``` solidity
+function distributeReward(address[] _address, uint256[] _amounts) public returns (bool success);
+```
+
+#### purchase
+
+Transfers #`price` ARA tokens from `_purchaser`'s wallet and adds this `did` to `_purchaser`'s library in the _Library_ contract. Requires `_purchaser` to first [`approve`](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md#approve) this AFS contract address in the _ARA Token_ contract. If `_download` is `true`, any remaining [`allowance`](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md#allowance) is deposited as rewards via `depositReward`.
+
+``` solidity
+function purchase(string _purchaser, bool _download) external returns (bool success);
+```
+
 #### write
 
 Writes `_buffer` at `_offset` in `_file`. If `_last_write` is true, emits the `Commit` event. If `_file` has been marked `invalid`, this function reverts. Only `owner_` may call this function.
@@ -219,35 +262,11 @@ Invalidates the SLEEP files for this AFS by setting both `Buffer` structs to `in
 function unlist() public returns (bool success);
 ```
 
-#### setPrice
-
-Sets the price (in ARA tokens) of this AFS, including rewards. Only the `owner_` may call this function. This function should revert if `reward` has been set and `_price` does not exceed it.
-
-``` solidity
-function setPrice(uint256 _price) external returns (bool success);
-```
-
-#### setReward
-
-Sets the reward allocation (in ARA tokens) for this AFS. Only the `owner` may call this function. This function should revert if `price` has been set and `_reward` exceeds it.
-
-``` solidity
-function setReward(uint256 _reward) external returns (bool success);
-```
-
-#### purchase
-
-Transfers #`price` ARA tokens from `_purchaser`'s wallet and adds this `did` to `_purchaser`'s library in the _Library_ contract. Requires `_purchaser` to first [`approve`](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md#approve) this AFS contract address in the _ARA Token_ contract.
-
-``` solidity
-function purchase(string _purchaser) external returns (bool success);
-```
-
 ### 4.6 Events
 
 #### Commit
 
-MUST trigger when the final buffer has been written in a commit
+MUST trigger when the final buffer has been written in a commit.
 
 ``` solidity
 event Commit(string _did, uint8 _file, uint256 _offset, bytes _buffer);
@@ -255,7 +274,7 @@ event Commit(string _did, uint8 _file, uint256 _offset, bytes _buffer);
 
 #### Unlisted
 
-MUST trigger when an AFS is unlisted
+MUST trigger when an AFS is unlisted.
 
 ``` solidity
 event Unlisted(string _did);
@@ -263,18 +282,26 @@ event Unlisted(string _did);
 
 #### PriceSet
 
-MUST trigger when an AFS price is set
+MUST trigger when an AFS price is set.
 
 ``` solidity
 event PriceSet(string _did, uint256 _price);
 ```
 
-#### RewardSet
+#### RewardDeposited
 
-MUST trigger when an AFS reward is set
+MUST trigger when rewards are deposited.
 
 ``` solidity
-event RewardSet(string _did, uint256 _reward);
+event RewardDeposited(string _did, uint256 _reward);
+```
+
+### RewardDistributed
+
+MUST trigger when rewards are distributed.
+
+``` solidity
+event RewardDistributed(string _did, uint256 _distributed, uint256 _returned);
 ```
 
 #### Purchased
@@ -294,12 +321,83 @@ contract AFS is AFSBase {
 
   constructor(address _lib, address _token, string _did) public {
     owner_  = msg.sender;
-    token_  = _token;
-    lib_    = _lib;
+    token_  = ARAToken(_token);
+    lib_    = Library(_lib);
     did_    = _did;
     listed_ = true;
     price_  = 0;
-    reward_ = 0;
+  }
+
+  function setPrice(uint256 _price) external onlyBy(owner_) returns (bool success) {
+    price_ = _price;
+    emit PriceSet(did_, price_);
+    return true;
+  }
+
+  function depositReward(uint256 _reward) public returns (bool success) {
+    bytes32 hashedAddress = keccak256(abi.encodePacked(msg.sender));
+    if (purchasers_[hashedAddress]) {
+      uint256 allowance = token_.allowance(msg.sender, address(this));
+      if (allowance >= _reward 
+        && token_.transferFrom(msg.sender, address(this), _reward)) {
+        rewards_[hashedAddress] += _reward;
+        assert(rewards_[hashedAddress] <= token_.balanceOf(address(this)));
+        emit RewardDeposited(did_, _reward);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function distributeReward(address[] _addresses, uint256[] _amounts) public returns (bool success) {
+    bytes32 hashedAddress = keccak256(abi.encodePacked(msg.sender));
+    require(rewards_[hashedAddress] > 0 && _addresses.length == _amounts.length);
+
+    uint256 totalRewards;
+    for (uint256 i = 0; i < _amounts.length; i++) {
+      totalRewards += _amounts[i];
+    }
+    require(rewards_[hashedAddress] <= token_.balanceOf(address(this)) 
+      && rewards_[hashedAddress] >= totalRewards);
+
+    success = true;
+    for (uint256 j = 0; j < _addresses.length; j++) {
+      success = success && token_.transferFrom(address(this), _addresses[j], _amounts[j]);
+      if (success) {
+        rewards_[hashedAddress] -= _amounts[j];
+      }
+    }
+
+    uint256 returned = 0;
+    if (rewards_[hashedAddress] > 0 
+      && token_.transferFrom(address(this), msg.sender, rewards_[hashedAddress])) {
+      returned = rewards_[hashedAddress];
+      rewards_[hashedAddress] = 0;
+    }
+
+    emit RewardDistributed(did_, totalRewards - returned, returned);
+
+    return success;
+  }
+
+  function purchase(string _purchaser, bool _download) external returns (bool success) {
+    uint256 allowance = token_.allowance(msg.sender, address(this));
+    require (allowance >= price_); // check if purchaser approved purchase
+
+    if (token_.transferFrom(msg.sender, owner_, price_)) {
+      bytes32 hashedAddress = keccak256(abi.encodePacked(msg.sender));
+      purchasers_[hashedAddress] = true;
+      lib_.addLibraryItem(_purchaser, did_);
+      emit Purchased(_purchaser, did_);
+
+      if (_download && allowance > price_) {
+        depositReward(allowance - price_);
+      }
+
+      return true;
+    } else {
+      return false;
+    }
   }
 
   // Storage methods (random-access-contract)
@@ -329,36 +427,6 @@ contract AFS is AFSBase {
     listed_ = false;
     emit Unlisted(did_);
     return true;
-  }
-
-  // Pricing methods
-  function setPrice(uint256 _price) external onlyBy(owner_) returns (bool success) {
-    require(reward_ <= _price);
-    price_ = _price;
-    emit PriceSet(did_, price_);
-    return true;
-  }
-
-  function setReward(uint256 _reward) external onlyBy(owner_) returns (bool success) {
-    require(_reward <= price_);
-    reward_ = _reward;
-    emit RewardSet(did_, reward_);
-    return true;
-  }
-
-  // Purchase methods
-  function purchase(string _purchaser) external returns (bool success) {
-    ARAToken token = ARAToken(token_);
-    require (token.allowance(msg.sender, address(this)) >= price_); // check if purchaser approved purchase
-
-    if (token.transferFrom(address(this), owner_, price_ - reward_)) {
-      Library lib = Library(lib_);
-      lib.addLibraryItem(_purchaser, did_);
-      emit Purchased(_purchaser, did_);
-      return true;
-    } else {
-      return false;
-    }
   }
 }
 ```
