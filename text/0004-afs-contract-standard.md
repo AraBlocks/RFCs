@@ -2,7 +2,7 @@ AFS Contract Standard
 ==============
 
 ---
-Request For Comments: 0000
+Request For Comments: 0004
 ---
 Author(s): Eric Jiang
 ---
