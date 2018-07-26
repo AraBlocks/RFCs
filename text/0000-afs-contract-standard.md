@@ -59,7 +59,7 @@ contract AFSBase {
   event PriceSet(string _did, uint256 _price);
   event RewardDeposited(string _did, uint256 _reward);
   event RewardDistributed(string _did, uint256 _distributed, uint256 _returned);
-  event Purchased(string _purchaser, string _did);
+  event Purchased(string _purchaser, string _did, bool _download);
 
   modifier onlyBy(address _account)
   {
@@ -388,7 +388,7 @@ contract AFS is AFSBase {
       bytes32 hashedAddress = keccak256(abi.encodePacked(msg.sender));
       purchasers_[hashedAddress] = true;
       lib_.addLibraryItem(_purchaser, did_);
-      emit Purchased(_purchaser, did_);
+      emit Purchased(_purchaser, did_, _download);
 
       if (_download && allowance > price_) {
         depositReward(allowance - price_);
