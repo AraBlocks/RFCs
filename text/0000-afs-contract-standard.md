@@ -78,10 +78,10 @@ contract AFSBase {
     bool invalid;
   }
 
-  function setPrice(uint256 _price) external returns (bool success);
+  function setPrice(uint256 _price) external;
 
   function depositReward(uint256 _reward) public returns (bool success);
-  function distributeReward(address[] _address, uint256[] _amounts) public returns (bool success);
+  function distributeReward(address[] _address, uint256[] _amounts) external returns (bool success);
 
   function purchase(string _purchaser, bool _download) external returns (bool success);
 
@@ -211,7 +211,7 @@ bool invalid;
 Sets the price (in ARA tokens) of this AFS. Only the `owner_` may call this function.
 
 ``` solidity
-function setPrice(uint256 _price) external returns (bool success);
+function setPrice(uint256 _price) external;
 ```
 
 #### depositReward
@@ -227,7 +227,7 @@ function depositReward(uint256 _reward) public returns (bool success);
 Distributes the previously deposited reward by `msg.sender`. The amounts provided by `_amounts` are sent to the provided `_addresses`, respectively. If there is any reward balance remaining following distribution, it is returned to `msg.sender`.
 
 ``` solidity
-function distributeReward(address[] _address, uint256[] _amounts) public returns (bool success);
+function distributeReward(address[] _address, uint256[] _amounts) external returns (bool success);
 ```
 
 #### purchase
@@ -328,10 +328,9 @@ contract AFS is AFSBase {
     price_  = 0;
   }
 
-  function setPrice(uint256 _price) external onlyBy(owner_) returns (bool success) {
+  function setPrice(uint256 _price) external onlyBy(owner_) {
     price_ = _price;
     emit PriceSet(did_, price_);
-    return true;
   }
 
   function depositReward(uint256 _reward) public returns (bool success) {
