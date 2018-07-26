@@ -309,7 +309,7 @@ event RewardDistributed(string _did, uint256 _distributed, uint256 _returned);
 MUST trigger when an AFS is purchased
 
 ``` solidity
-event Purchased(string _purchaser, string _did, _download);
+event Purchased(string _purchaser, string _did, bool _download);
 ```
 
 ## 5. Real World Example
