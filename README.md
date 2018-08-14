@@ -1,7 +1,7 @@
-ARA Request For Comments (RFC)
+Ara Request For Comments (RFC)
 ==============================
 
-A repository of Request For Comments (RFC) documents for ARA.
+A repository of Request For Comments (RFC) documents for Ara.
 
 ## 0. Table Of Contents
 
@@ -13,9 +13,9 @@ A repository of Request For Comments (RFC) documents for ARA.
 
 Many changes, including bug fixes and documentation improvements can be implemented and reviewed via the normal GitHub pull request workflow.
 
-Some changes though are "substantial", and we ask that these be put through a bit of a design process and produce a consensus amongst the ARA community and the ARA Core team.
+Some changes though are "substantial", and we ask that these be put through a bit of a design process and produce a consensus amongst the Ara community and the Ara Core team.
 
-The RFC process is designed to give contributors a structured pathway to present and integrate new features into the ARA project. The active RFC list can be found [here](https://github.com/arablocks/rfc/pulls).
+The RFC process is designed to give contributors a structured pathway to present and integrate new features into the Ara project. The active RFC list can be found [here](https://github.com/arablocks/rfc/pulls).
 
 ## 2. RFC Categories
 
@@ -32,7 +32,7 @@ RFC document authors should follow the outlined process in this section to submi
 
 ### 3.1 RFC Consideration - When To Open A RFC
 
-You must follow this process when you plan to make "substantial" changes to the ARA protocol or its documentation. The following are some examples of features that would require an RFC:
+You must follow this process when you plan to make "substantial" changes to the Ara protocol or its documentation. The following are some examples of features that would require an RFC:
 
 * An update to the Smart Contracts that exist within the protocol, proposing a new way to calculate and distribute rewards
 * A change to the existing Filesystem Hierarchy found within AFS
@@ -41,7 +41,7 @@ On the contrary, items that do not have to be submitted as an RFC:
 
 * Rephrasing, reorganizing, refactoring, or otherwise "changing shape does not change meaning".
 * Additions that strictly improve objective, numerical quality criteria (warning removal, performance improvements, platform coverage etc).
-* Additions likely to be noticed only by other developers of ARA, invisible to users of ARA.
+* Additions likely to be noticed only by other developers of Ara, invisible to users of Ara.
 
 ### 3.2 Submission - How To Open A RFC
 
@@ -56,7 +56,7 @@ The submission of a RFC should follow the steps outlined in this section.
 
 #### Final Comment Period
 
-RFCs that are candidates for inclusion in ARA will enter a "final comment period" lasting 3 calendar days. The beginning of this period will be signaled with a comment and tag on the RFCs pull request.
+RFCs that are candidates for inclusion in Ara will enter a "final comment period" lasting 3 calendar days. The beginning of this period will be signaled with a comment and tag on the RFCs pull request.
 
 An RFC can be modified based upon feedback from the team and community. Significant modifications may trigger a new final comment period.
 
@@ -70,7 +70,7 @@ An RFC may be accepted or rejected prior to the close of its final comment perio
 
 ### 3.3 RFC Review
 
-Once an RFC becomes "active" then authors may implement it and submit the feature as a pull request to the ARA repo that the RFC is relevant to. Being "active" is not a rubber stamp, and in particular still does not mean the feature will ultimately be merged; it does mean that in principle all the major stakeholders have agreed to the feature and are amenable to merging it.
+Once an RFC becomes "active" then authors may implement it and submit the feature as a pull request to the Ara repo that the RFC is relevant to. Being "active" is not a rubber stamp, and in particular still does not mean the feature will ultimately be merged; it does mean that in principle all the major stakeholders have agreed to the feature and are amenable to merging it.
 
 Furthermore, the fact that a given RFC has been accepted and is 'active' implies nothing about what priority is assigned to its implementation, nor whether anybody is currently working on it.
 
@@ -84,7 +84,7 @@ If you are interested in working on the implementation for an 'active' RFC, but 
 
 ## Inspiration
 
-**ARA's RFC process owes inspiration to the [React](https://github.com/reactjs/rfcs) and [Rust](https://github.com/rust-lang/rfcs) RFC processes.**
+**Ara's RFC process owes inspiration to the [React](https://github.com/reactjs/rfcs) and [Rust](https://github.com/rust-lang/rfcs) RFC processes.**
 
 ## References
 
